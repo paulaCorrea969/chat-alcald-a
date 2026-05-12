@@ -1,0 +1,18 @@
+[
+  {
+    "username": "alex_alzate",
+    "display": "AlexanderAlzate",
+    "role": "funcionario",
+    "dependencyId": "secretaria-general-gobierno",
+    "subdependencyId": "contratacion",
+    "passwordHash": "$2b$10$6YwoOURLk3K.r7sLG7d40.bHkzjaZ7/9naY5pupVsJyMoXs28xmVK"
+  },
+  {
+    "username": "paula_correa",
+    "display": "PaulaCorrea",
+    "role": "funcionario",
+    "dependencyId": "secretaria-general-gobierno",
+    "subdependencyId": "contratacion",
+    "passwordHash": "$2b$10$i76fOd/Wk6KwYWWweiT4UuUXN0ugUdAq4gqgnfFjVmK.pruiYU9ZG"
+  }
+]
