@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat Interno - Alcaldia de Pacora</title>
+  <style>
+    :root {
+      --bg: #eef3f8;
+      --panel: #ffffff;
+      --panel-alt: #f7fafc;
+      --line: #d7e2ee;
+      --text: #102a43;
+      --muted: #627d98;
+      --brand: #1354a5;
+      --brand-strong: #0b3d77;
+      --brand-soft: #e7f0fb;
+      --success: #1f9d55;
+      --danger: #c93c37;
+      --me: #e9f7ef;
+      --shadow: 0 12px 26px rgba(16, 42, 67, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #dcecff 0, transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, #eef3f8 100%);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid #c8d7e5;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .logo img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      min-height: calc(100vh - 81px);
+    }
+
+    aside,
+    main {
+      padding: 18px;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.48);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .title {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    input,
+    button,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid #c8d7e5;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    input:disabled,
+    select:disabled,
+    textarea:disabled {
+      background: #f5f7fa;
+      color: #7b8794;
+      cursor: not-allowed;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .primary {
+      background: var(--brand);
+      color: #ffffff;
+    }
+
+    .secondary {
+      background: #17324d;
+      color: #ffffff;
+    }
+
+    .ghost {
+      background: var(--panel-alt);
+      color: var(--brand-strong);
+      border: 1px solid var(--line);
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .helper,
+    .error,
+    .success,
+    .meta-text {
+      font-size: 12px;
+    }
+
+    .helper,
+    .meta-text {
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--danger);
+      min-height: 16px;
+    }
+
+    .success {
+      color: var(--success);
+      min-height: 16px;
+    }
+
+    .tabs {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      background: var(--panel-alt);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .tab {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--brand-strong);
+    }
+
+    .tab.active {
+      background: var(--brand);
+      color: #ffffff;
+    }
+
+    .dependencies {
+      display: grid;
+      gap: 10px;
+      max-height: 360px;
+      overflow: auto;
+    }
+
+    .dependency {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-alt);
+      overflow: hidden;
+    }
+
+    .dependency-head {
+      width: 100%;
+      text-align: left;
+      border-radius: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 12px 14px;
+    }
+
+    .dependency-head.selected {
+      background: var(--brand-soft);
+      color: var(--brand-strong);
+    }
+
+    .subdependencies {
+      display: grid;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+
+    .subdependency {
+      padding: 9px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      text-align: left;
+    }
+
+    .subdependency.active {
+      background: var(--brand);
+      color: #ffffff;
+      border-color: var(--brand);
+    }
+
+    .users,
+    .files,
+    .managed-users,
+    .audit-events {
+      display: grid;
+      gap: 8px;
+      max-height: 240px;
+      overflow: auto;
+    }
+
+    .user,
+    .file-item,
+    .managed-user,
+    .audit-event {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-alt);
+    }
+
+    .user-main,
+    .file-main,
+    .managed-user-main,
+    .audit-event-main {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .user-main {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge.admin {
+      background: #fde8e8;
+      color: #a61b1b;
+    }
+
+    .badge.funcionario {
+      background: #e0f2fe;
+      color: #0c4a6e;
+    }
+
+    .chat-shell {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .chat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .msgs {
+      overflow: auto;
+      padding: 4px 2px;
+      min-height: 320px;
+    }
+
+    .system {
+      margin: 10px auto;
+      padding: 7px 10px;
+      width: fit-content;
+      max-width: 100%;
+      border-radius: 999px;
+      background: #edf2f7;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .msg {
+      width: min(76%, 720px);
+      margin: 10px 0;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 10px 24px rgba(16, 42, 67, 0.04);
+      word-break: break-word;
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .msg.me {
+      margin-left: auto;
+      background: var(--me);
+    }
+
+    .msg-user {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .msg-body {
+      white-space: pre-wrap;
+    }
+
+    .msg-meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .msg-delete {
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid #fecaca;
+      background: #fff1f1;
+      color: #991b1b;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .empty {
+      padding: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+    }
+
+    .file-link {
+      color: var(--brand);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .row,
+      .composer {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .msg {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">
+        <img src="/logo.jpg" alt="Logo de la Alcaldia de Pacora" />
+      </div>
+      <div>
+        <h1>Chat Interno - Alcaldia de Pacora</h1>
+        <div class="sub">Dependencias, subdependencias y acceso por usuario</div>
+      </div>
+    </div>
+    <div class="pill">Usuario: <b id="who">Sin sesion</b></div>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <div class="card">
+        <span class="title">Dependencias</span>
+        <div class="helper">Selecciona una subdependencia para usarla en el registro o para ver la organizacion del chat.</div>
+        <div id="dependencyList" class="dependencies"></div>
+      </div>
+
+      <div class="card">
+        <span class="title">Acceso</span>
+        <div class="tabs">
+          <button id="tabLogin" class="tab active" type="button">Iniciar sesion</button>
+          <button id="tabRegister" class="tab hidden" type="button">Crear usuario</button>
+        </div>
+
+        <div id="loginPanel" class="stack">
+          <input id="loginUsername" type="text" placeholder="Usuario" autocomplete="username" />
+          <input id="loginPassword" type="password" placeholder="Contrasena" autocomplete="current-password" />
+          <div class="row">
+            <button id="btnLogin" class="primary" type="button">Entrar</button>
+            <button id="btnLogout" class="secondary hidden" type="button">Salir</button>
+          </div>
+          <div id="authError" class="error"></div>
+        </div>
+
+        <div id="registerPanel" class="stack hidden">
+          <input id="registerDisplay" type="text" placeholder="Nombre visible" />
+          <input id="registerUsername" type="text" placeholder="Nuevo usuario" />
+          <input id="registerPassword" type="password" placeholder="Nueva contrasena" />
+          <select id="registerDependency"></select>
+          <select id="registerSubdependency"></select>
+          <button id="btnRegister" class="ghost" type="button">Crear usuario</button>
+          <div id="registerStatus" class="helper"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="title">Conectados</span>
+        <div id="usersList" class="users"></div>
+      </div>
+
+      <div class="card">
+        <span class="title">Archivos de la sala</span>
+        <div class="stack">
+          <input id="fileInput" type="file" disabled />
+          <div class="row">
+            <button id="btnUpload" class="ghost" disabled type="button">Subir</button>
+            <button id="btnRefreshFiles" class="ghost" disabled type="button">Actualizar</button>
+          </div>
+          <div id="fileStatus" class="helper"></div>
+          <div id="filesList" class="files"></div>
+        </div>
+      </div>
+
+      <div id="passwordCard" class="card hidden">
+        <span class="title">Contrasena</span>
+        <div class="stack">
+          <input id="currentPassword" type="password" placeholder="Contrasena actual" />
+          <input id="newPassword" type="password" placeholder="Nueva contrasena" />
+          <button id="btnChangePassword" class="ghost" type="button">Cambiar contrasena</button>
+          <div id="passwordStatus" class="helper"></div>
+        </div>
+      </div>
+
+      <div id="userAdminCard" class="card hidden">
+        <span class="title">Usuarios</span>
+        <div class="helper">Solo el administrador puede eliminar usuarios creados desde la app. Los usuarios base quedan protegidos.</div>
+        <div id="userAdminStatus" class="helper"></div>
+        <div id="managedUsersList" class="managed-users"></div>
+      </div>
+
+      <div id="auditCard" class="card hidden">
+        <span class="title">Bitacora</span>
+        <div class="helper">Registro reciente de acciones sensibles del sistema.</div>
+        <div class="row" style="margin-top:10px;">
+          <button id="btnRefreshAudit" class="ghost" type="button">Actualizar</button>
+        </div>
+        <div id="auditStatus" class="helper"></div>
+        <div id="auditEventsList" class="audit-events"></div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="card chat-shell">
+        <div class="chat-head">
+          <div>
+            <span class="title" style="margin-bottom: 4px;">Sala activa</span>
+            <div id="roomInfo">Inicia sesion para entrar al chat de una subdependencia</div>
+          </div>
+          <div id="connectionStatus" class="helper">Desconectado</div>
+        </div>
+
+        <div id="msgs" class="msgs"></div>
+
+        <div class="composer">
+          <textarea id="text" placeholder="Escribe un mensaje..." disabled></textarea>
+          <button id="send" class="primary" disabled type="button">Enviar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let socket = null;
+    let token = "";
+    let myUsername = "";
+    let myName = "";
+    let myRoomId = "";
+    let activeRoomId = "";
+    let activeRoomLabel = "";
+    let myRole = "";
+    let dependencies = [];
+    let selectedDependencyId = "";
+    let selectedSubdependencyId = "";
+
+    const who = document.getElementById("who");
+    const dependencyList = document.getElementById("dependencyList");
+    const roomInfo = document.getElementById("roomInfo");
+    const connectionStatus = document.getElementById("connectionStatus");
+    const usersList = document.getElementById("usersList");
+    const filesList = document.getElementById("filesList");
+    const msgs = document.getElementById("msgs");
+    const fileInput = document.getElementById("fileInput");
+    const btnLogin = document.getElementById("btnLogin");
+    const btnLogout = document.getElementById("btnLogout");
+    const btnUpload = document.getElementById("btnUpload");
+    const btnRefreshFiles = document.getElementById("btnRefreshFiles");
+    const send = document.getElementById("send");
+    const text = document.getElementById("text");
+    const authError = document.getElementById("authError");
+    const fileStatus = document.getElementById("fileStatus");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabRegister = document.getElementById("tabRegister");
+    const loginPanel = document.getElementById("loginPanel");
+    const registerPanel = document.getElementById("registerPanel");
+    const loginUsername = document.getElementById("loginUsername");
+    const loginPassword = document.getElementById("loginPassword");
+    const registerDisplay = document.getElementById("registerDisplay");
+    const registerUsername = document.getElementById("registerUsername");
+    const registerPassword = document.getElementById("registerPassword");
+    const registerDependency = document.getElementById("registerDependency");
+    const registerSubdependency = document.getElementById("registerSubdependency");
+    const btnRegister = document.getElementById("btnRegister");
+    const registerStatus = document.getElementById("registerStatus");
+    const userAdminCard = document.getElementById("userAdminCard");
+    const userAdminStatus = document.getElementById("userAdminStatus");
+    const managedUsersList = document.getElementById("managedUsersList");
+    const passwordCard = document.getElementById("passwordCard");
+    const currentPassword = document.getElementById("currentPassword");
+    const newPassword = document.getElementById("newPassword");
+    const btnChangePassword = document.getElementById("btnChangePassword");
+    const passwordStatus = document.getElementById("passwordStatus");
+    const auditCard = document.getElementById("auditCard");
+    const btnRefreshAudit = document.getElementById("btnRefreshAudit");
+    const auditStatus = document.getElementById("auditStatus");
+    const auditEventsList = document.getElementById("auditEventsList");
+
+    function setActiveTab(tabName) {
+      const loginActive = tabName === "login";
+      tabLogin.classList.toggle("active", loginActive);
+      tabRegister.classList.toggle("active", !loginActive);
+      loginPanel.classList.toggle("hidden", !loginActive);
+      registerPanel.classList.toggle("hidden", loginActive);
+    }
+
+    function setRegisterAvailability(isVisible) {
+      tabRegister.classList.toggle("hidden", !isVisible);
+
+      if (!isVisible) {
+        setActiveTab("login");
+      }
+    }
+
+    function setAuthError(message) {
+      authError.textContent = message || "";
+    }
+
+    function setRegisterStatus(message, type = "helper") {
+      registerStatus.textContent = message || "";
+      registerStatus.className = type;
+    }
+
+    function setFileStatus(message, isError = false) {
+      fileStatus.textContent = message || "";
+      fileStatus.className = isError ? "error" : "helper";
+    }
+
+    function setUserAdminStatus(message, isError = false) {
+      userAdminStatus.textContent = message || "";
+      userAdminStatus.className = isError ? "error" : "helper";
+    }
+
+    function setPasswordStatus(message, isError = false) {
+      passwordStatus.textContent = message || "";
+      passwordStatus.className = isError ? "error" : "helper";
+    }
+
+    function setAuditStatus(message, isError = false) {
+      auditStatus.textContent = message || "";
+      auditStatus.className = isError ? "error" : "helper";
+    }
+
+    function clearMessages() {
+      msgs.innerHTML = "";
+    }
+
+    function getSelectedRoom() {
+      const dependency = getDependencyById(selectedDependencyId);
+      const subdependency = getSubdependencyById(selectedDependencyId, selectedSubdependencyId);
+
+      if (!dependency || !subdependency) {
+        return null;
+      }
+
+      return {
+        roomId: `${dependency.id}__${subdependency.id}`,
+        roomLabel: `${dependency.name} / ${subdependency.name}`,
+        dependencyId: dependency.id,
+        subdependencyId: subdependency.id,
+      };
+    }
+
+    function canDeleteMessage(message) {
+      if (!message) {
+        return false;
+      }
+
+      return message.username === myUsername || myRole === "admin";
+    }
+
+    function addSystem(message) {
+      const node = document.createElement("div");
+      node.className = "system";
+      node.textContent = message;
+      msgs.appendChild(node);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeMessageById(messageId, deletedBy) {
+      const messageNodes = Array.from(msgs.querySelectorAll("[data-message-id]"));
+      const node = messageNodes.find(
+        (element) => element.dataset.messageId === String(messageId)
+      );
+
+      if (node) {
+        node.remove();
+      }
+
+      addSystem(`Un mensaje fue eliminado por ${deletedBy}`);
+    }
+
+    function addMsg(message) {
+      const node = document.createElement("div");
+      node.className = "msg" + (message.user === myName ? " me" : "");
+      node.dataset.messageId = message.id || "";
+
+      const headerNode = document.createElement("div");
+      headerNode.className = "msg-header";
+
+      const headerInfo = document.createElement("div");
+
+      const userNode = document.createElement("div");
+      userNode.className = "msg-user";
+      userNode.textContent = message.user;
+
+      const bodyNode = document.createElement("div");
+      bodyNode.className = "msg-body";
+      bodyNode.textContent = message.text;
+
+      const metaNode = document.createElement("div");
+      metaNode.className = "msg-meta";
+      metaNode.textContent = message.time;
+
+      headerInfo.appendChild(userNode);
+      headerInfo.appendChild(metaNode);
+      headerNode.appendChild(headerInfo);
+
+      if (canDeleteMessage(message)) {
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "msg-delete";
+        deleteButton.textContent = "Eliminar";
+        deleteButton.addEventListener("click", () => {
+          if (!socket) {
+            return;
+          }
+
+          const confirmed = window.confirm("Este mensaje se eliminara para todos.");
+
+          if (!confirmed) {
+            return;
+          }
+
+          socket.emit("chat:delete-message", message.id);
+        });
+        headerNode.appendChild(deleteButton);
+      }
+
+      node.appendChild(headerNode);
+      node.appendChild(bodyNode);
+      msgs.appendChild(node);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function renderHistory(history) {
+      clearMessages();
+
+      if (!history || history.length === 0) {
+        addSystem("Todavia no hay mensajes en esta subdependencia");
+        return;
+      }
+
+      history.forEach((item) => addMsg(item));
+    }
+
+    function renderUsers(users) {
+      usersList.innerHTML = "";
+
+      if (!users || users.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Sin usuarios conectados en esta sala";
+        usersList.appendChild(empty);
+        return;
+      }
+
+      users.forEach((user) => {
+        const row = document.createElement("div");
+        row.className = "user";
+
+        const main = document.createElement("div");
+        main.className = "user-main";
+
+        const dot = document.createElement("div");
+        dot.className = "dot";
+
+        const name = document.createElement("strong");
+        name.textContent = user.display || "Usuario";
+
+        const badge = document.createElement("span");
+        const role = user.role || "funcionario";
+        badge.className = `badge ${role}`;
+        badge.textContent = role === "admin" ? "ADMIN" : "FUNC";
+
+        main.appendChild(dot);
+        main.appendChild(name);
+        row.appendChild(main);
+        row.appendChild(badge);
+        usersList.appendChild(row);
+      });
+    }
+
+    function renderFiles(files) {
+      filesList.innerHTML = "";
+
+      if (!files || files.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No hay archivos cargados en esta subdependencia";
+        filesList.appendChild(empty);
+        return;
+      }
+
+      files.forEach((file) => {
+        const row = document.createElement("div");
+        row.className = "file-item";
+
+        const main = document.createElement("div");
+        main.className = "file-main";
+
+        const link = document.createElement("a");
+        link.className = "file-link";
+        link.href = file.url;
+        link.textContent = file.name;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.addEventListener("click", async (event) => {
+          event.preventDefault();
+          await downloadFile(file.url);
+        });
+
+        const meta = document.createElement("div");
+        meta.className = "meta-text";
+        meta.textContent = `${formatSize(file.size)} - ${new Date(file.uploadedAt).toLocaleString("es-CO")}`;
+
+        const textWrap = document.createElement("div");
+        textWrap.appendChild(link);
+        textWrap.appendChild(meta);
+
+        main.appendChild(textWrap);
+        row.appendChild(main);
+        filesList.appendChild(row);
+      });
+    }
+
+    function renderManagedUsers(users) {
+      managedUsersList.innerHTML = "";
+
+      if (!users || users.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No hay usuarios para gestionar";
+        managedUsersList.appendChild(empty);
+        return;
+      }
+
+      users.forEach((user) => {
+        const row = document.createElement("div");
+        row.className = "managed-user";
+
+        const main = document.createElement("div");
+        main.className = "managed-user-main";
+
+        const title = document.createElement("strong");
+        title.textContent = `${user.display} (${user.username})`;
+
+        const meta = document.createElement("div");
+        meta.className = "meta-text";
+        meta.textContent = `${user.roomLabel} - ${user.seeded ? "Usuario base" : "Usuario creado"}`;
+
+        main.appendChild(title);
+        main.appendChild(meta);
+        row.appendChild(main);
+
+        if (user.deletable) {
+          const actions = document.createElement("div");
+          actions.className = "stack";
+
+          const resetButton = document.createElement("button");
+          resetButton.type = "button";
+          resetButton.className = "ghost";
+          resetButton.textContent = "Reset clave";
+          resetButton.addEventListener("click", () => resetManagedUserPassword(user.username, user.display));
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "danger";
+          button.textContent = "Eliminar";
+          button.addEventListener("click", () => deleteManagedUser(user.username, user.display));
+
+          actions.appendChild(resetButton);
+          actions.appendChild(button);
+          row.appendChild(actions);
+        } else {
+          const badge = document.createElement("span");
+          badge.className = `badge ${user.role}`;
+          badge.textContent = "PROTEGIDO";
+          row.appendChild(badge);
+        }
+
+        managedUsersList.appendChild(row);
+      });
+    }
+
+    function renderAuditEvents(events) {
+      auditEventsList.innerHTML = "";
+
+      if (!events || events.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Todavia no hay eventos registrados";
+        auditEventsList.appendChild(empty);
+        return;
+      }
+
+      events.forEach((event) => {
+        const row = document.createElement("div");
+        row.className = "audit-event";
+
+        const main = document.createElement("div");
+        main.className = "audit-event-main";
+
+        const title = document.createElement("strong");
+        title.textContent = event.summary || event.type;
+
+        const meta = document.createElement("div");
+        meta.className = "meta-text";
+        meta.textContent = `${new Date(event.createdAt).toLocaleString("es-CO")} - ${event.actorDisplay || event.actorUsername || "Sistema"}`;
+
+        const context = document.createElement("div");
+        context.className = "meta-text";
+        context.textContent = event.roomLabel || event.targetDisplay || event.targetUsername || event.type;
+
+        main.appendChild(title);
+        main.appendChild(meta);
+        main.appendChild(context);
+        row.appendChild(main);
+        auditEventsList.appendChild(row);
+      });
+    }
+
+    function formatSize(size) {
+      if (size < 1024) return `${size} B`;
+      if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+      return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function setUI(isLoggedIn) {
+      loginUsername.disabled = isLoggedIn;
+      loginPassword.disabled = isLoggedIn;
+      const canManageUsers = isLoggedIn && myRole === "admin";
+      registerDisplay.disabled = !canManageUsers;
+      registerUsername.disabled = !canManageUsers;
+      registerPassword.disabled = !canManageUsers;
+      registerDependency.disabled = !canManageUsers;
+      registerSubdependency.disabled = !canManageUsers;
+      btnRegister.disabled = !canManageUsers;
+      text.disabled = !isLoggedIn;
+      send.disabled = !isLoggedIn;
+      fileInput.disabled = !isLoggedIn;
+      btnUpload.disabled = !isLoggedIn;
+      btnRefreshFiles.disabled = !isLoggedIn;
+      btnLogin.classList.toggle("hidden", isLoggedIn);
+      btnLogout.classList.toggle("hidden", !isLoggedIn);
+      const showAdminPanels = isLoggedIn && myRole === "admin";
+      passwordCard.classList.toggle("hidden", !isLoggedIn);
+      currentPassword.disabled = !isLoggedIn;
+      newPassword.disabled = !isLoggedIn;
+      btnChangePassword.disabled = !isLoggedIn;
+      userAdminCard.classList.toggle("hidden", !showAdminPanels);
+      auditCard.classList.toggle("hidden", !showAdminPanels);
+      btnRefreshAudit.disabled = !showAdminPanels;
+      setRegisterAvailability(canManageUsers);
+      connectionStatus.textContent = isLoggedIn ? "Conectando..." : "Desconectado";
+    }
+
+    function getDependencyById(dependencyId) {
+      return dependencies.find((dependency) => dependency.id === dependencyId) || null;
+    }
+
+    function getSubdependencyById(dependencyId, subdependencyId) {
+      const dependency = getDependencyById(dependencyId);
+
+      if (!dependency) {
+        return null;
+      }
+
+      return (
+        dependency.subdependencies.find(
+          (subdependency) => subdependency.id === subdependencyId
+        ) || null
+      );
+    }
+
+    function syncRegisterSelects() {
+      registerDependency.innerHTML = "";
+
+      dependencies.forEach((dependency) => {
+        const option = document.createElement("option");
+        option.value = dependency.id;
+        option.textContent = dependency.name;
+        registerDependency.appendChild(option);
+      });
+
+      if (!selectedDependencyId && dependencies[0]) {
+        selectedDependencyId = dependencies[0].id;
+      }
+
+      registerDependency.value = selectedDependencyId;
+      syncSubdependencySelect();
+    }
+
+    function syncSubdependencySelect() {
+      const dependency = getDependencyById(registerDependency.value || selectedDependencyId);
+      registerSubdependency.innerHTML = "";
+
+      if (!dependency) {
+        return;
+      }
+
+      dependency.subdependencies.forEach((subdependency) => {
+        const option = document.createElement("option");
+        option.value = subdependency.id;
+        option.textContent = subdependency.name;
+        registerSubdependency.appendChild(option);
+      });
+
+      const subdependency =
+        getSubdependencyById(dependency.id, selectedSubdependencyId) ||
+        dependency.subdependencies[0];
+
+      if (subdependency) {
+        registerSubdependency.value = subdependency.id;
+        selectedDependencyId = dependency.id;
+        selectedSubdependencyId = subdependency.id;
+      }
+    }
+
+    function selectRoom(dependencyId, subdependencyId) {
+      selectedDependencyId = dependencyId;
+      selectedSubdependencyId = subdependencyId;
+      registerDependency.value = dependencyId;
+      syncSubdependencySelect();
+      renderDependencies();
+
+      if (myRole === "admin" && token) {
+        const room = getSelectedRoom();
+
+        if (room && room.roomId !== activeRoomId) {
+          activeRoomId = room.roomId;
+          activeRoomLabel = room.roomLabel;
+          roomInfo.textContent = `${room.roomLabel} (cambiando...)`;
+
+          if (socket) {
+            socket.emit("admin:switch-room", { roomId: room.roomId });
+          }
+        }
+      }
+    }
+
+    function renderDependencies() {
+      dependencyList.innerHTML = "";
+
+      if (!dependencies.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No hay dependencias cargadas";
+        dependencyList.appendChild(empty);
+        return;
+      }
+
+      dependencies.forEach((dependency) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "dependency";
+
+        const head = document.createElement("button");
+        head.type = "button";
+        head.className = "dependency-head";
+        head.textContent = dependency.name;
+
+        if (dependency.id === selectedDependencyId) {
+          head.classList.add("selected");
+        }
+
+        head.addEventListener("click", () => {
+          const firstSubdependency = dependency.subdependencies[0];
+          selectRoom(
+            dependency.id,
+            selectedSubdependencyId && getSubdependencyById(dependency.id, selectedSubdependencyId)
+              ? selectedSubdependencyId
+              : firstSubdependency?.id || ""
+          );
+        });
+
+        const children = document.createElement("div");
+        children.className = "subdependencies";
+
+        dependency.subdependencies.forEach((subdependency) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "subdependency";
+          button.textContent = subdependency.name;
+
+          if (
+            dependency.id === selectedDependencyId &&
+            subdependency.id === selectedSubdependencyId
+          ) {
+            button.classList.add("active");
+          }
+
+          button.addEventListener("click", () => {
+            selectRoom(dependency.id, subdependency.id);
+
+            if (!tabRegister.classList.contains("hidden")) {
+              setActiveTab("register");
+            } else {
+              setActiveTab("login");
+            }
+          });
+
+          children.appendChild(button);
+        });
+
+        wrapper.appendChild(head);
+        wrapper.appendChild(children);
+        dependencyList.appendChild(wrapper);
+      });
+    }
+
+    async function apiFetch(url, options = {}) {
+      const headers = new Headers(options.headers || {});
+
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+
+       if (token && myRole === "admin" && activeRoomId) {
+        headers.set("x-room-id", activeRoomId);
+      }
+
+      return fetch(url, {
+        ...options,
+        headers,
+      });
+    }
+
+    function disconnectSocket() {
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    }
+
+    function connect() {
+      if (!token) {
+        return;
+      }
+
+      disconnectSocket();
+      connectionStatus.textContent = "Conectando...";
+
+      socket = io({
+        auth: { token },
+      });
+
+      socket.on("connect", () => {
+        connectionStatus.textContent = "Conectado";
+        setAuthError("");
+        addSystem("Conectado al chat");
+      });
+
+      socket.on("connect_error", () => {
+        connectionStatus.textContent = "Sin acceso";
+        setAuthError("No se pudo conectar al chat. Inicia sesion de nuevo.");
+        disconnectSocket();
+        token = "";
+        myName = "";
+        myRoomId = "";
+        who.textContent = "Sin sesion";
+        roomInfo.textContent = "Inicia sesion para entrar al chat de una subdependencia";
+        setUI(false);
+      });
+
+      socket.on("chat:history", renderHistory);
+      socket.on("users:update", renderUsers);
+      socket.on("system:message", addSystem);
+      socket.on("chat:message", (message) => addMsg(message));
+      socket.on("chat:message-deleted", (payload) => {
+        removeMessageById(payload.id, payload.deletedBy || "otro usuario");
+      });
+      socket.on("admin:room-switched", async (payload) => {
+        activeRoomId = payload.room.roomId;
+        activeRoomLabel = payload.room.roomLabel;
+        roomInfo.textContent = payload.room.roomLabel;
+        renderHistory(payload.history || []);
+        await refreshFiles();
+      });
+      socket.on("chat:error", (message) => {
+        addSystem(message);
+      });
+    }
+
+    async function loadDependencies() {
+      try {
+        const response = await fetch("/api/dependencies");
+        const data = await response.json();
+        dependencies = data.dependencies || [];
+        syncRegisterSelects();
+        renderDependencies();
+      } catch (error) {
+        dependencyList.innerHTML = '<div class="empty">No se pudieron cargar las dependencias</div>';
+      }
+    }
+
+    async function refreshFiles() {
+      if (!token) {
+        renderFiles([]);
+        return;
+      }
+
+      try {
+        const response = await apiFetch("/api/files");
+
+        if (!response.ok) {
+          throw new Error("No se pudo cargar la lista de archivos");
+        }
+
+        const data = await response.json();
+        renderFiles(data.files || []);
+      } catch (error) {
+        setFileStatus(error.message || "Error cargando archivos", true);
+      }
+    }
+
+    async function loadManagedUsers() {
+      if (myRole !== "admin" || !token) {
+        renderManagedUsers([]);
+        return;
+      }
+
+      try {
+        const response = await apiFetch("/api/users");
+
+        if (!response.ok) {
+          throw new Error("No se pudo cargar la lista de usuarios");
+        }
+
+        const data = await response.json();
+        renderManagedUsers(data.users || []);
+      } catch (error) {
+        setUserAdminStatus(error.message || "Error cargando usuarios", true);
+      }
+    }
+
+    async function loadAuditEvents() {
+      if (myRole !== "admin" || !token) {
+        renderAuditEvents([]);
+        return;
+      }
+
+      setAuditStatus("Cargando bitacora...");
+
+      try {
+        const response = await apiFetch("/api/audit?limit=40");
+
+        if (!response.ok) {
+          throw new Error("No se pudo cargar la bitacora");
+        }
+
+        const data = await response.json();
+        renderAuditEvents(data.events || []);
+        setAuditStatus(`Mostrando los eventos mas recientes`);
+      } catch (error) {
+        setAuditStatus(error.message || "Error cargando bitacora", true);
+      }
+    }
+
+    async function deleteManagedUser(username, display) {
+      const confirmed = window.confirm(`Vas a eliminar a ${display} (${username}). Esta accion no se puede deshacer.`);
+
+      if (!confirmed) {
+        return;
+      }
+
+      setUserAdminStatus("Eliminando usuario...");
+
+      try {
+        const response = await apiFetch(`/api/users/${encodeURIComponent(username)}`, {
+          method: "DELETE",
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "No se pudo eliminar el usuario");
+        }
+
+        setUserAdminStatus("Usuario eliminado correctamente");
+        await loadManagedUsers();
+        await loadAuditEvents();
+      } catch (error) {
+        setUserAdminStatus(error.message || "No se pudo eliminar el usuario", true);
+      }
+    }
+
+    async function resetManagedUserPassword(username, display) {
+      const generatedPassword = window.prompt(`Nueva contrasena para ${display} (${username}):`);
+
+      if (!generatedPassword) {
+        return;
+      }
+
+      setUserAdminStatus("Restableciendo contrasena...");
+
+      try {
+        const response = await apiFetch(`/api/users/${encodeURIComponent(username)}/reset-password`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newPassword: generatedPassword,
+          }),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "No se pudo restablecer la contrasena");
+        }
+
+        setUserAdminStatus(`Contrasena restablecida para ${display}`);
+        await loadAuditEvents();
+      } catch (error) {
+        setUserAdminStatus(error.message || "No se pudo restablecer la contrasena", true);
+      }
+    }
+
+    async function downloadFile(url) {
+      try {
+        const response = await apiFetch(url);
+
+        if (!response.ok) {
+          throw new Error("No se pudo descargar el archivo");
+        }
+
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const tempLink = document.createElement("a");
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const match = disposition.match(/filename="?([^"]+)"?/i);
+
+        tempLink.href = objectUrl;
+        tempLink.download = match ? match[1] : "archivo";
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        tempLink.remove();
+        URL.revokeObjectURL(objectUrl);
+      } catch (error) {
+        setFileStatus(error.message || "Error descargando archivo", true);
+      }
+    }
+
+    async function uploadFile() {
+      if (!token || !fileInput.files || fileInput.files.length === 0) {
+        setFileStatus("Selecciona un archivo antes de subir", true);
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("archivo", fileInput.files[0]);
+      setFileStatus("Subiendo archivo...");
+
+      try {
+        const response = await apiFetch("/api/files/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "No se pudo subir el archivo");
+        }
+
+        fileInput.value = "";
+        setFileStatus("Archivo subido correctamente");
+        await refreshFiles();
+        await loadAuditEvents();
+      } catch (error) {
+        setFileStatus(error.message || "Error subiendo archivo", true);
+      }
+    }
+
+    async function registerUser() {
+      setRegisterStatus("", "helper");
+
+      if (!token || myRole !== "admin") {
+        setRegisterStatus("Solo un administrador puede crear usuarios", "error");
+        return;
+      }
+
+      const payload = {
+        display: registerDisplay.value.trim(),
+        username: registerUsername.value.trim().toLowerCase(),
+        password: registerPassword.value.trim(),
+        dependencyId: registerDependency.value,
+        subdependencyId: registerSubdependency.value,
+      };
+
+      if (!payload.display || !payload.username || !payload.password) {
+        setRegisterStatus("Completa todos los datos del nuevo usuario", "error");
+        return;
+      }
+
+      try {
+        const response = await apiFetch("/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "No se pudo crear el usuario");
+        }
+
+        loginUsername.value = payload.username;
+        loginPassword.value = payload.password;
+        registerDisplay.value = "";
+        registerUsername.value = "";
+        registerPassword.value = "";
+        setRegisterStatus("Usuario creado. Ya puedes iniciar sesion.", "success");
+        await loadManagedUsers();
+        await loadAuditEvents();
+      } catch (error) {
+        setRegisterStatus(error.message || "No se pudo crear el usuario", "error");
+      }
+    }
+
+    async function changePassword() {
+      setPasswordStatus("");
+
+      const current = currentPassword.value.trim();
+      const next = newPassword.value.trim();
+
+      if (!current || !next) {
+        setPasswordStatus("Completa la contrasena actual y la nueva", true);
+        return;
+      }
+
+      try {
+        const response = await apiFetch("/api/change-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            currentPassword: current,
+            newPassword: next,
+          }),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "No se pudo cambiar la contrasena");
+        }
+
+        currentPassword.value = "";
+        newPassword.value = "";
+        setPasswordStatus("Contrasena actualizada correctamente");
+        await loadAuditEvents();
+      } catch (error) {
+        setPasswordStatus(error.message || "No se pudo cambiar la contrasena", true);
+      }
+    }
+
+    async function login() {
+      setAuthError("");
+
+      const username = loginUsername.value.trim().toLowerCase();
+      const password = loginPassword.value.trim();
+
+      if (!username || !password) {
+        setAuthError("Completa usuario y contrasena");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Credenciales invalidas");
+        }
+
+        token = data.token;
+        myUsername = data.user.username;
+        myName = data.user.display;
+        myRoomId = data.user.roomId;
+        activeRoomId = data.user.roomId;
+        activeRoomLabel = data.user.roomLabel;
+        myRole = data.user.role;
+        who.textContent = `${data.user.display} (${data.user.role})`;
+        roomInfo.textContent = data.user.roomLabel;
+        selectRoom(data.user.dependencyId, data.user.subdependencyId);
+        clearMessages();
+        setUI(true);
+        setFileStatus("");
+        setUserAdminStatus("");
+        setAuditStatus("");
+        connect();
+        await refreshFiles();
+        await loadManagedUsers();
+        await loadAuditEvents();
+      } catch (error) {
+        setAuthError(error.message || "No se pudo iniciar sesion");
+      }
+    }
+
+    async function logout() {
+      try {
+        if (token) {
+          await apiFetch("/api/logout", { method: "POST" });
+        }
+      } catch (error) {
+      }
+
+      disconnectSocket();
+      token = "";
+      myUsername = "";
+      myName = "";
+      myRoomId = "";
+      activeRoomId = "";
+      activeRoomLabel = "";
+      myRole = "";
+      who.textContent = "Sin sesion";
+      roomInfo.textContent = "Inicia sesion para entrar al chat de una subdependencia";
+      usersList.innerHTML = "";
+      filesList.innerHTML = "";
+      managedUsersList.innerHTML = "";
+      auditEventsList.innerHTML = "";
+      loginUsername.value = "";
+      loginPassword.value = "";
+      fileInput.value = "";
+      clearMessages();
+      addSystem("Sesion finalizada");
+      setFileStatus("");
+      setAuthError("");
+      setUserAdminStatus("");
+      setPasswordStatus("");
+      setAuditStatus("");
+      setRegisterStatus("", "helper");
+      setUI(false);
+    }
+
+    function sendMsg() {
+      const message = text.value.trim();
+
+      if (!message || !socket) {
+        return;
+      }
+
+      socket.emit("chat:message", message);
+      text.value = "";
+      text.focus();
+    }
+
+    tabLogin.addEventListener("click", () => setActiveTab("login"));
+    tabRegister.addEventListener("click", () => setActiveTab("register"));
+    btnLogin.addEventListener("click", login);
+    btnLogout.addEventListener("click", logout);
+    btnUpload.addEventListener("click", uploadFile);
+    btnRefreshFiles.addEventListener("click", refreshFiles);
+    btnChangePassword.addEventListener("click", changePassword);
+    btnRefreshAudit.addEventListener("click", loadAuditEvents);
+    btnRegister.addEventListener("click", registerUser);
+    send.addEventListener("click", sendMsg);
+
+    registerDependency.addEventListener("change", () => {
+      selectedDependencyId = registerDependency.value;
+      selectedSubdependencyId = "";
+      syncSubdependencySelect();
+      renderDependencies();
+    });
+
+    registerSubdependency.addEventListener("change", () => {
+      selectedSubdependencyId = registerSubdependency.value;
+      renderDependencies();
+    });
+
+    loginPassword.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !btnLogin.disabled) {
+        login();
+      }
+    });
+
+    text.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMsg();
+      }
+    });
+
+    renderUsers([]);
+    renderFiles([]);
+    renderAuditEvents([]);
+    setRegisterAvailability(false);
+    setUI(false);
+    loadDependencies();
+  </script>
+</body>
+</html>

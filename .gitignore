@@ -1,0 +1,5 @@
+node_modules/
+uploads/*
+!uploads/config/
+!uploads/config/upload.js
+npm-debug.log*
