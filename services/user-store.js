@@ -3,39 +3,30 @@ const { db } = require("./database");
 const { resolveRoom } = require("../config/dependencies");
 
 const PASSWORD_SALT_ROUNDS = Number(process.env.CHAT_PASSWORD_SALT_ROUNDS || 10);
+const isProduction = process.env.NODE_ENV === "production";
+
+function getSeedPassword(envName, fallback) {
+  const configuredPassword = process.env[envName];
+
+  if (configuredPassword) {
+    return configuredPassword;
+  }
+
+  if (isProduction) {
+    throw new Error(`Configura ${envName} antes de iniciar en produccion`);
+  }
+
+  return fallback;
+}
 
 const seededUsers = [
   {
     username: "admin",
-    password: process.env.CHAT_PASSWORD_ADMIN || "Admin#Pacora2026!",
+    password: getSeedPassword("CHAT_PASSWORD_ADMIN", "Admin#Pacora2026!"),
     display: "Administrador",
     role: "admin",
     dependencyId: "secretaria-general-gobierno",
     subdependencyId: "contratacion",
-  },
-  {
-    username: "planeacion",
-    password: process.env.CHAT_PASSWORD_PLANEACION || "Plan#Pacora2026!",
-    display: "Planeacion",
-    role: "funcionario",
-    dependencyId: "planeacion-desarrollo-economico",
-    subdependencyId: "planeacion",
-  },
-  {
-    username: "sara",
-    password: process.env.CHAT_PASSWORD_SARA || "Sara#Pacora2026!",
-    display: "Sara",
-    role: "funcionario",
-    dependencyId: "planeacion-desarrollo-economico",
-    subdependencyId: "planeacion",
-  },
-  {
-    username: "tesoreria",
-    password: process.env.CHAT_PASSWORD_TESORERIA || "Tes#Pacora2026!",
-    display: "Tesoreria",
-    role: "funcionario",
-    dependencyId: "hacienda-credito-publico",
-    subdependencyId: "tesoreria",
   },
 ];
 
@@ -127,7 +118,7 @@ function getManagedUsers() {
       subdependencyId: user.subdependencyId,
       subdependencyName: user.subdependencyName,
       roomLabel: user.roomLabel,
-      seeded: isSeededUsername(user.username),
+      protected: isSeededUsername(user.username),
       deletable: !isSeededUsername(user.username),
     }))
     .sort((a, b) => a.display.localeCompare(b.display, "es"));
@@ -230,7 +221,7 @@ function deleteUser(username) {
   }
 
   if (isSeededUsername(normalized)) {
-    throw new Error("No se puede eliminar un usuario base del sistema");
+    throw new Error("No se puede eliminar el administrador principal");
   }
 
   const result = db.prepare("DELETE FROM users WHERE username = ?").run(normalized);

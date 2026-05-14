@@ -1,5 +1,10 @@
 node_modules/
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+tests/tmp/
 uploads/*
 !uploads/config/
 !uploads/config/upload.js
+.env
 npm-debug.log*

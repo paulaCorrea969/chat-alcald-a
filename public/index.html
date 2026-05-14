@@ -18,7 +18,37 @@
       --success: #1f9d55;
       --danger: #c93c37;
       --me: #e9f7ef;
+      --header-bg: rgba(255, 255, 255, 0.92);
+      --sidebar-bg: rgba(255, 255, 255, 0.48);
+      --field-bg: #ffffff;
+      --field-disabled: #f5f7fa;
+      --system-bg: #edf2f7;
+      --avatar-bg: #dbeafe;
+      --avatar-text: #0b3d77;
       --shadow: 0 12px 26px rgba(16, 42, 67, 0.06);
+    }
+
+    body.dark {
+      --bg: #0f172a;
+      --panel: #182235;
+      --panel-alt: #111c2e;
+      --line: #2d3d56;
+      --text: #eef5ff;
+      --muted: #a9b7cc;
+      --brand: #4f8fe8;
+      --brand-strong: #d6e7ff;
+      --brand-soft: #203a61;
+      --success: #5ee0a0;
+      --danger: #ff8585;
+      --me: #193a32;
+      --header-bg: rgba(15, 23, 42, 0.94);
+      --sidebar-bg: rgba(17, 28, 46, 0.62);
+      --field-bg: #0f1b2d;
+      --field-disabled: #182235;
+      --system-bg: #22314a;
+      --avatar-bg: #254d7f;
+      --avatar-text: #e8f2ff;
+      --shadow: 0 14px 30px rgba(0, 0, 0, 0.26);
     }
 
     * {
@@ -35,13 +65,19 @@
         linear-gradient(180deg, #f7fbff 0%, #eef3f8 100%);
     }
 
+    body.dark {
+      background:
+        radial-gradient(circle at top left, rgba(79, 143, 232, 0.22) 0, transparent 32%),
+        linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+    }
+
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
       padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.92);
+      background: var(--header-bg);
       border-bottom: 1px solid var(--line);
       backdrop-filter: blur(10px);
     }
@@ -107,7 +143,7 @@
       flex-direction: column;
       gap: 14px;
       border-right: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.48);
+      background: var(--sidebar-bg);
     }
 
     main {
@@ -155,7 +191,7 @@
       padding: 11px 12px;
       border-radius: 12px;
       border: 1px solid #c8d7e5;
-      background: #ffffff;
+      background: var(--field-bg);
       color: var(--text);
     }
 
@@ -167,7 +203,7 @@
     input:disabled,
     select:disabled,
     textarea:disabled {
-      background: #f5f7fa;
+      background: var(--field-disabled);
       color: #7b8794;
       cursor: not-allowed;
     }
@@ -293,7 +329,7 @@
       padding: 9px 10px;
       border-radius: 12px;
       border: 1px solid var(--line);
-      background: #ffffff;
+      background: var(--field-bg);
       color: var(--text);
       text-align: left;
     }
@@ -342,6 +378,82 @@
     .user-main {
       flex-direction: row;
       align-items: center;
+    }
+
+    .upload-zone {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      background: var(--panel-alt);
+    }
+
+    .file-item {
+      align-items: stretch;
+      padding: 10px;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .file-item:hover {
+      border-color: var(--brand);
+      transform: translateY(-1px);
+    }
+
+    .file-main {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .file-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: var(--brand-soft);
+      color: var(--brand-strong);
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+    }
+
+    .file-name {
+      max-width: 210px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 5px;
+    }
+
+    .file-chip {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .download-button {
+      align-self: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: var(--brand-strong);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      white-space: nowrap;
     }
 
     .dot {
@@ -396,7 +508,7 @@
       width: fit-content;
       max-width: 100%;
       border-radius: 999px;
-      background: #edf2f7;
+      background: var(--system-bg);
       color: var(--muted);
       font-size: 12px;
       text-align: center;
@@ -413,6 +525,38 @@
       word-break: break-word;
     }
 
+    .msg-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0;
+      width: min(86%, 780px);
+    }
+
+    .msg-row.me {
+      margin-left: auto;
+      flex-direction: row-reverse;
+    }
+
+    .msg-row .msg {
+      width: 100%;
+      margin: 0;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: var(--avatar-bg);
+      color: var(--avatar-text);
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+    }
+
     .msg-header {
       display: flex;
       align-items: flex-start;
@@ -421,7 +565,6 @@
     }
 
     .msg.me {
-      margin-left: auto;
       background: var(--me);
     }
 
@@ -457,6 +600,54 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 10px;
       margin-top: 12px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--panel);
+      color: var(--brand-strong);
+      border: 1px solid var(--line);
+    }
+
+    .admin-dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .metric-value {
+      display: block;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--brand-strong);
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
     .empty {
@@ -507,6 +698,26 @@
       .msg {
         width: 100%;
       }
+
+      .msg-row {
+        width: 100%;
+      }
+
+      .admin-dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .file-item {
+        display: grid;
+      }
+
+      .file-name {
+        max-width: 100%;
+      }
+
+      .download-button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -521,7 +732,10 @@
         <div class="sub">Dependencias, subdependencias y acceso por usuario</div>
       </div>
     </div>
-    <div class="pill">Usuario: <b id="who">Sin sesion</b></div>
+    <div class="topbar-actions">
+      <button id="btnTheme" class="icon-button" type="button" title="Cambiar tema">◐</button>
+      <div class="pill">Usuario: <b id="who">Sin sesion</b></div>
+    </div>
   </header>
 
   <div class="layout">
@@ -534,11 +748,6 @@
 
       <div class="card">
         <span class="title">Acceso</span>
-        <div class="tabs">
-          <button id="tabLogin" class="tab active" type="button">Iniciar sesion</button>
-          <button id="tabRegister" class="tab hidden" type="button">Crear usuario</button>
-        </div>
-
         <div id="loginPanel" class="stack">
           <input id="loginUsername" type="text" placeholder="Usuario" autocomplete="username" />
           <input id="loginPassword" type="password" placeholder="Contrasena" autocomplete="current-password" />
@@ -548,8 +757,12 @@
           </div>
           <div id="authError" class="error"></div>
         </div>
+      </div>
 
+      <div id="registerCard" class="card hidden">
+        <span class="title">Registro de usuarios</span>
         <div id="registerPanel" class="stack hidden">
+          <div class="helper">Crea usuarios y asignales su dependencia y subdependencia.</div>
           <input id="registerDisplay" type="text" placeholder="Nombre visible" />
           <input id="registerUsername" type="text" placeholder="Nuevo usuario" />
           <input id="registerPassword" type="password" placeholder="Nueva contrasena" />
@@ -568,10 +781,12 @@
       <div class="card">
         <span class="title">Archivos de la sala</span>
         <div class="stack">
-          <input id="fileInput" type="file" disabled />
-          <div class="row">
-            <button id="btnUpload" class="ghost" disabled type="button">Subir</button>
-            <button id="btnRefreshFiles" class="ghost" disabled type="button">Actualizar</button>
+          <div class="upload-zone">
+            <input id="fileInput" type="file" disabled />
+            <div class="row">
+              <button id="btnUpload" class="ghost" disabled type="button">Subir archivo</button>
+              <button id="btnRefreshFiles" class="ghost" disabled type="button">Actualizar</button>
+            </div>
           </div>
           <div id="fileStatus" class="helper"></div>
           <div id="filesList" class="files"></div>
@@ -590,7 +805,10 @@
 
       <div id="userAdminCard" class="card hidden">
         <span class="title">Usuarios</span>
-        <div class="helper">Solo el administrador puede eliminar usuarios creados desde la app. Los usuarios base quedan protegidos.</div>
+        <div class="helper">Solo el administrador principal queda protegido. Los demas usuarios registrados se pueden gestionar desde aqui.</div>
+        <div class="row" style="margin-top:10px;">
+          <button id="btnOpenRegister" class="primary" type="button">Registrar nuevo usuario</button>
+        </div>
         <div id="userAdminStatus" class="helper"></div>
         <div id="managedUsersList" class="managed-users"></div>
       </div>
@@ -607,6 +825,24 @@
     </aside>
 
     <main>
+      <div id="adminDashboard" class="admin-dashboard hidden">
+        <div class="metric">
+          <span id="metricUsers" class="metric-value">0</span>
+          <span class="metric-label">usuarios registrados</span>
+        </div>
+        <div class="metric">
+          <span id="metricOnline" class="metric-value">0</span>
+          <span class="metric-label">conectados en sala</span>
+        </div>
+        <div class="metric">
+          <span id="metricFiles" class="metric-value">0</span>
+          <span class="metric-label">archivos de sala</span>
+        </div>
+        <div class="metric">
+          <span id="metricAudit" class="metric-value">0</span>
+          <span class="metric-label">eventos recientes</span>
+        </div>
+      </div>
       <div class="card chat-shell">
         <div class="chat-head">
           <div>
@@ -639,7 +875,12 @@
     let dependencies = [];
     let selectedDependencyId = "";
     let selectedSubdependencyId = "";
+    let currentUsers = [];
+    let currentFiles = [];
+    let currentManagedUsers = [];
+    let currentAuditEvents = [];
 
+    const btnTheme = document.getElementById("btnTheme");
     const who = document.getElementById("who");
     const dependencyList = document.getElementById("dependencyList");
     const roomInfo = document.getElementById("roomInfo");
@@ -656,9 +897,8 @@
     const text = document.getElementById("text");
     const authError = document.getElementById("authError");
     const fileStatus = document.getElementById("fileStatus");
-    const tabLogin = document.getElementById("tabLogin");
-    const tabRegister = document.getElementById("tabRegister");
     const loginPanel = document.getElementById("loginPanel");
+    const registerCard = document.getElementById("registerCard");
     const registerPanel = document.getElementById("registerPanel");
     const loginUsername = document.getElementById("loginUsername");
     const loginPassword = document.getElementById("loginPassword");
@@ -672,6 +912,7 @@
     const userAdminCard = document.getElementById("userAdminCard");
     const userAdminStatus = document.getElementById("userAdminStatus");
     const managedUsersList = document.getElementById("managedUsersList");
+    const btnOpenRegister = document.getElementById("btnOpenRegister");
     const passwordCard = document.getElementById("passwordCard");
     const currentPassword = document.getElementById("currentPassword");
     const newPassword = document.getElementById("newPassword");
@@ -681,21 +922,29 @@
     const btnRefreshAudit = document.getElementById("btnRefreshAudit");
     const auditStatus = document.getElementById("auditStatus");
     const auditEventsList = document.getElementById("auditEventsList");
-
-    function setActiveTab(tabName) {
-      const loginActive = tabName === "login";
-      tabLogin.classList.toggle("active", loginActive);
-      tabRegister.classList.toggle("active", !loginActive);
-      loginPanel.classList.toggle("hidden", !loginActive);
-      registerPanel.classList.toggle("hidden", loginActive);
-    }
+    const adminDashboard = document.getElementById("adminDashboard");
+    const metricUsers = document.getElementById("metricUsers");
+    const metricOnline = document.getElementById("metricOnline");
+    const metricFiles = document.getElementById("metricFiles");
+    const metricAudit = document.getElementById("metricAudit");
 
     function setRegisterAvailability(isVisible) {
-      tabRegister.classList.toggle("hidden", !isVisible);
+      registerCard.classList.toggle("hidden", !isVisible);
+      registerPanel.classList.toggle("hidden", !isVisible);
+    }
 
-      if (!isVisible) {
-        setActiveTab("login");
+    function openRegisterForm() {
+      if (myRole !== "admin" || !token) {
+        return;
       }
+
+      registerCard.classList.remove("hidden");
+      registerPanel.classList.remove("hidden");
+      registerDisplay.focus();
+      registerCard.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
 
     function setAuthError(message) {
@@ -725,6 +974,38 @@
     function setAuditStatus(message, isError = false) {
       auditStatus.textContent = message || "";
       auditStatus.className = isError ? "error" : "helper";
+    }
+
+    function updateDashboard() {
+      metricUsers.textContent = currentManagedUsers.length;
+      metricOnline.textContent = currentUsers.length;
+      metricFiles.textContent = currentFiles.length;
+      metricAudit.textContent = currentAuditEvents.length;
+    }
+
+    function setTheme(theme) {
+      const isDark = theme === "dark";
+      document.body.classList.toggle("dark", isDark);
+      btnTheme.textContent = isDark ? "☀" : "◐";
+      btnTheme.title = isDark ? "Usar tema claro" : "Usar tema oscuro";
+      localStorage.setItem("chatTheme", isDark ? "dark" : "light");
+    }
+
+    function toggleTheme() {
+      setTheme(document.body.classList.contains("dark") ? "light" : "dark");
+    }
+
+    function getInitials(name) {
+      const parts = String(name || "Usuario")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      return parts
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase() || "U";
     }
 
     function clearMessages() {
@@ -777,6 +1058,13 @@
     }
 
     function addMsg(message) {
+      const row = document.createElement("div");
+      row.className = "msg-row" + (message.user === myName ? " me" : "");
+
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = getInitials(message.user);
+
       const node = document.createElement("div");
       node.className = "msg" + (message.user === myName ? " me" : "");
       node.dataset.messageId = message.id || "";
@@ -825,7 +1113,10 @@
 
       node.appendChild(headerNode);
       node.appendChild(bodyNode);
-      msgs.appendChild(node);
+      row.dataset.messageId = message.id || "";
+      row.appendChild(avatar);
+      row.appendChild(node);
+      msgs.appendChild(row);
       msgs.scrollTop = msgs.scrollHeight;
     }
 
@@ -841,6 +1132,8 @@
     }
 
     function renderUsers(users) {
+      currentUsers = users || [];
+      updateDashboard();
       usersList.innerHTML = "";
 
       if (!users || users.length === 0) {
@@ -878,6 +1171,8 @@
     }
 
     function renderFiles(files) {
+      currentFiles = files || [];
+      updateDashboard();
       filesList.innerHTML = "";
 
       if (!files || files.length === 0) {
@@ -895,10 +1190,15 @@
         const main = document.createElement("div");
         main.className = "file-main";
 
+        const icon = document.createElement("div");
+        icon.className = "file-icon";
+        icon.textContent = getFileTypeLabel(file.name);
+
         const link = document.createElement("a");
-        link.className = "file-link";
+        link.className = "file-link file-name";
         link.href = file.url;
         link.textContent = file.name;
+        link.title = file.name;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
         link.addEventListener("click", async (event) => {
@@ -906,21 +1206,45 @@
           await downloadFile(file.url);
         });
 
+        const sizeChip = document.createElement("span");
+        sizeChip.className = "file-chip";
+        sizeChip.textContent = formatSize(file.size);
+
+        const dateChip = document.createElement("span");
+        dateChip.className = "file-chip";
+        dateChip.textContent = new Date(file.uploadedAt).toLocaleDateString("es-CO", {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
         const meta = document.createElement("div");
-        meta.className = "meta-text";
-        meta.textContent = `${formatSize(file.size)} - ${new Date(file.uploadedAt).toLocaleString("es-CO")}`;
+        meta.className = "file-meta-row";
+        meta.appendChild(sizeChip);
+        meta.appendChild(dateChip);
 
         const textWrap = document.createElement("div");
         textWrap.appendChild(link);
         textWrap.appendChild(meta);
 
+        const downloadButton = document.createElement("button");
+        downloadButton.type = "button";
+        downloadButton.className = "download-button";
+        downloadButton.textContent = "Descargar";
+        downloadButton.addEventListener("click", () => downloadFile(file.url));
+
+        main.appendChild(icon);
         main.appendChild(textWrap);
         row.appendChild(main);
+        row.appendChild(downloadButton);
         filesList.appendChild(row);
       });
     }
 
     function renderManagedUsers(users) {
+      currentManagedUsers = users || [];
+      updateDashboard();
       managedUsersList.innerHTML = "";
 
       if (!users || users.length === 0) {
@@ -943,7 +1267,7 @@
 
         const meta = document.createElement("div");
         meta.className = "meta-text";
-        meta.textContent = `${user.roomLabel} - ${user.seeded ? "Usuario base" : "Usuario creado"}`;
+        meta.textContent = `${user.roomLabel} - ${user.protected ? "Administrador protegido" : "Usuario registrado"}`;
 
         main.appendChild(title);
         main.appendChild(meta);
@@ -980,6 +1304,8 @@
     }
 
     function renderAuditEvents(events) {
+      currentAuditEvents = events || [];
+      updateDashboard();
       auditEventsList.innerHTML = "";
 
       if (!events || events.length === 0) {
@@ -1022,6 +1348,15 @@
       return `${(size / (1024 * 1024)).toFixed(1)} MB`;
     }
 
+    function getFileTypeLabel(fileName) {
+      const extension = String(fileName || "").split(".").pop().toLowerCase();
+
+      if (extension === "pdf") return "PDF";
+      if (["doc", "docx"].includes(extension)) return "DOC";
+      if (["jpg", "jpeg", "png"].includes(extension)) return "IMG";
+      return "FILE";
+    }
+
     function setUI(isLoggedIn) {
       loginUsername.disabled = isLoggedIn;
       loginPassword.disabled = isLoggedIn;
@@ -1040,12 +1375,14 @@
       btnLogin.classList.toggle("hidden", isLoggedIn);
       btnLogout.classList.toggle("hidden", !isLoggedIn);
       const showAdminPanels = isLoggedIn && myRole === "admin";
+      adminDashboard.classList.toggle("hidden", !showAdminPanels);
       passwordCard.classList.toggle("hidden", !isLoggedIn);
       currentPassword.disabled = !isLoggedIn;
       newPassword.disabled = !isLoggedIn;
       btnChangePassword.disabled = !isLoggedIn;
       userAdminCard.classList.toggle("hidden", !showAdminPanels);
       auditCard.classList.toggle("hidden", !showAdminPanels);
+      btnOpenRegister.disabled = !showAdminPanels;
       btnRefreshAudit.disabled = !showAdminPanels;
       setRegisterAvailability(canManageUsers);
       connectionStatus.textContent = isLoggedIn ? "Conectando..." : "Desconectado";
@@ -1188,10 +1525,8 @@
           button.addEventListener("click", () => {
             selectRoom(dependency.id, subdependency.id);
 
-            if (!tabRegister.classList.contains("hidden")) {
-              setActiveTab("register");
-            } else {
-              setActiveTab("login");
+            if (myRole === "admin" && token) {
+              openRegisterForm();
             }
           });
 
@@ -1625,6 +1960,11 @@
       filesList.innerHTML = "";
       managedUsersList.innerHTML = "";
       auditEventsList.innerHTML = "";
+      currentUsers = [];
+      currentFiles = [];
+      currentManagedUsers = [];
+      currentAuditEvents = [];
+      updateDashboard();
       loginUsername.value = "";
       loginPassword.value = "";
       fileInput.value = "";
@@ -1651,14 +1991,14 @@
       text.focus();
     }
 
-    tabLogin.addEventListener("click", () => setActiveTab("login"));
-    tabRegister.addEventListener("click", () => setActiveTab("register"));
+    btnTheme.addEventListener("click", toggleTheme);
     btnLogin.addEventListener("click", login);
     btnLogout.addEventListener("click", logout);
     btnUpload.addEventListener("click", uploadFile);
     btnRefreshFiles.addEventListener("click", refreshFiles);
     btnChangePassword.addEventListener("click", changePassword);
     btnRefreshAudit.addEventListener("click", loadAuditEvents);
+    btnOpenRegister.addEventListener("click", openRegisterForm);
     btnRegister.addEventListener("click", registerUser);
     send.addEventListener("click", sendMsg);
 
@@ -1690,6 +2030,7 @@
     renderUsers([]);
     renderFiles([]);
     renderAuditEvents([]);
+    setTheme(localStorage.getItem("chatTheme") || "light");
     setRegisterAvailability(false);
     setUI(false);
     loadDependencies();

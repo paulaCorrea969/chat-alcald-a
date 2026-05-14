@@ -46,6 +46,7 @@ function resetDatabase() {
     DELETE FROM users;
     DELETE FROM messages;
     DELETE FROM audit_events;
+    DELETE FROM sessions;
   `);
 }
 
@@ -82,6 +83,18 @@ runTest("createUser crea usuario y verifyPassword valida hash", () => {
   assert.equal(user.role, "funcionario");
   assert.equal(userStore.verifyPassword(user, "clave123"), true);
   assert.equal(userStore.verifyPassword(user, "otra-clave"), false);
+});
+
+runTest("getManagedUsers protege solo al administrador principal", () => {
+  resetDatabase();
+  const users = userStore.getManagedUsers();
+  const protectedUsers = users.filter((user) => !user.deletable);
+
+  assert.deepEqual(
+    protectedUsers.map((user) => user.username),
+    ["admin"]
+  );
+  assert.equal(protectedUsers[0].protected, true);
 });
 
 runTest("changeUserPassword actualiza la contrasena del usuario", () => {
@@ -146,6 +159,24 @@ runTest("appendAuditEvent y getAuditEvents registran eventos", () => {
   assert.equal(events.length, 1);
   assert.equal(events[0].type, "user.created");
   assert.match(events[0].summary, /Usuario creado/);
+});
+
+runTest("createSession persiste y deleteSession invalida el token", () => {
+  resetDatabase();
+  const auth = require("../middleware/auth");
+  const session = auth.createSession({
+    username: "admin",
+    display: "Administrador",
+    role: "admin",
+    roomId: "secretaria-general-gobierno__contratacion",
+  });
+
+  const storedUser = auth.getSessionFromToken(session.token);
+  assert.equal(storedUser.username, "admin");
+  assert.equal(storedUser.role, "admin");
+
+  auth.deleteSession(session.token);
+  assert.equal(auth.getSessionFromToken(session.token), null);
 });
 
 const failed = results.filter((result) => !result.passed).length;
