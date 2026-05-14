@@ -1839,7 +1839,7 @@
         }
 
         loginUsername.value = payload.username;
-        loginPassword.value = payload.password;
+        loginPassword.value = "";
         registerDisplay.value = "";
         registerUsername.value = "";
         registerPassword.value = "";
@@ -1921,6 +1921,7 @@
         activeRoomId = data.user.roomId;
         activeRoomLabel = data.user.roomLabel;
         myRole = data.user.role;
+        loginPassword.value = "";
         who.textContent = `${data.user.display} (${data.user.role})`;
         roomInfo.textContent = data.user.roomLabel;
         selectRoom(data.user.dependencyId, data.user.subdependencyId);

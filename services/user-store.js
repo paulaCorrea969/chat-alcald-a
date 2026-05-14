@@ -196,7 +196,23 @@ function updateStoredUserPassword(username, newPassword) {
     throw new Error("El usuario no existe");
   }
 
-  seededUser.password = password;
+  const seedRecord = buildUserRecord(seededUser);
+
+  if (!seedRecord) {
+    throw new Error("El usuario no tiene una sala valida");
+  }
+
+  db.prepare(`
+    INSERT INTO users (username, display, role, dependency_id, subdependency_id, password_hash)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    seedRecord.username,
+    seedRecord.display,
+    seedRecord.role,
+    seedRecord.dependencyId,
+    seedRecord.subdependencyId,
+    hashPassword(password)
+  );
 }
 
 function changeUserPassword(username, currentPassword, newPassword) {

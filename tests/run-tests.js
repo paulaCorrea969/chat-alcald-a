@@ -113,6 +113,22 @@ runTest("changeUserPassword actualiza la contrasena del usuario", () => {
   assert.equal(userStore.verifyPassword(updatedUser, "inicial123"), false);
 });
 
+runTest("changeUserPassword persiste la contrasena del administrador principal", () => {
+  resetDatabase();
+  const admin = userStore.findUserByUsername("admin");
+
+  assert.equal(userStore.verifyPassword(admin, "Admin#Pacora2026!"), true);
+
+  userStore.changeUserPassword("admin", "Admin#Pacora2026!", "AdminNueva123");
+
+  const updatedAdmin = userStore.findUserByUsername("admin");
+  const storedAdmin = db.prepare("SELECT username FROM users WHERE username = ?").get("admin");
+
+  assert.equal(userStore.verifyPassword(updatedAdmin, "AdminNueva123"), true);
+  assert.equal(userStore.verifyPassword(updatedAdmin, "Admin#Pacora2026!"), false);
+  assert.equal(storedAdmin.username, "admin");
+});
+
 runTest("appendRoomMessage y findRoomMessage operan sobre SQLite", () => {
   resetDatabase();
   const created = messageStore.appendRoomMessage("room-test", {
