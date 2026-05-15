@@ -3,17 +3,17 @@ const DEPENDENCIES = [
     id: "secretaria-general-gobierno",
     name: "Secretaria general y de gobierno",
     subdependencies: [
-      { id: "inspeccion-policia", name: "Inspeccion de policia" },
-      { id: "comisaria-familia", name: "Comisaria de familia" },
-      { id: "victimas-poblacion-vulnerable", name: "Victimas y poblacion vulnerable" },
-      { id: "contratacion", name: "Contratacion" },
+      { id: "inspeccion-policia", name: "Inspeccion de Policía" },
+      { id: "comisaria-familia", name: "Comisaria de Familia" },
+      { id: "victimas-poblacion-vulnerable", name: "Victimas y Población Vulnerable" },
+      { id: "contratacion", name: "Contratación" },
     ],
   },
   {
     id: "hacienda-credito-publico",
-    name: "Hacienda y credito publico",
+    name: "Hacienda y Crédito Público",
     subdependencies: [
-      { id: "tesoreria", name: "Tesoreria" },
+      { id: "tesoreria", name: "Tesorería" },
       { id: "recaudo", name: "Recaudo" },
       { id: "hacienda", name: "Hacienda" },
       { id: "presupuesto", name: "Presupuesto" },
@@ -21,48 +21,49 @@ const DEPENDENCIES = [
   },
   {
     id: "direccion-local-salud",
-    name: "Direccion local de salud",
+    name: "Dirección Local de Salud",
     subdependencies: [
-      { id: "direccion-local-salud", name: "Direccion local de salud" },
+      { id: "direccion-local-salud", name: "Dirección Local de Salud" },
     ],
   },
   {
     id: "planeacion-desarrollo-economico",
-    name: "Planeacion y desarrollo economico",
+    name: "Planeación y Desarrollo Económico",
     subdependencies: [
-      { id: "planeacion", name: "Planeacion" },
-      { id: "sisben-umata", name: "Sisben Umata" },
+      { id: "planeacion", name: "Planeación" },
+      { id: "sisben-umata", name: "Sisbén" },
+      { id: "umata", name: "UMATA" },
     ],
   },
   {
     id: "despacho-alcalde",
-    name: "Despacho alcalde",
+    name: "Despacho Alcalde",
     subdependencies: [
-      { id: "despacho-alcalde", name: "Despacho alcalde" },
+      { id: "despacho-alcalde", name: "Despacho Alcalde" },
     ],
   },
   {
     id: "secretaria-desarrollo-social",
-    name: "Secretaria de desarrollo social",
+    name: "Secretaria de Desarrollo Social",
     subdependencies: [
       { id: "biblioteca", name: "Biblioteca" },
       { id: "ludoteca", name: "Ludoteca" },
-      { id: "desarrollo-social", name: "Desarrollo social" },
-      { id: "desarrollo-comunitario", name: "Desarrollo comunitario" },
+      { id: "desarrollo-social", name: "Desarrollo Social" },
+      { id: "desarrollo-comunitario", name: "Desarrollo Comunitario" },
     ],
   },
   {
     id: "control-interno",
-    name: "Control interno",
+    name: "Control Interno",
     subdependencies: [
-      { id: "control-interno", name: "Control interno" },
+      { id: "control-interno", name: "Control Interno" },
     ],
   },
   {
     id: "infraestructura",
     name: "Infraestructura",
     subdependencies: [
-      { id: "alumbrado-publico", name: "Alumbrado publico" },
+      { id: "alumbrado-publico", name: "Alumbrado Público" },
       { id: "infraestructura", name: "Infraestructura" },
     ],
   },

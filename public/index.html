@@ -1076,7 +1076,7 @@
 
       const userNode = document.createElement("div");
       userNode.className = "msg-user";
-      userNode.textContent = message.user;
+      userNode.textContent = `${message.user} (${message.fromRoomLabel || message.role || "Sin sala"})`;
 
       const bodyNode = document.createElement("div");
       bodyNode.className = "msg-body";
@@ -1457,7 +1457,7 @@
       syncSubdependencySelect();
       renderDependencies();
 
-      if (myRole === "admin" && token) {
+      if (token) {
         const room = getSelectedRoom();
 
         if (room && room.roomId !== activeRoomId) {
@@ -1467,6 +1467,7 @@
 
           if (socket) {
             socket.emit("admin:switch-room", { roomId: room.roomId });
+            addSystem(`${myName} entr a la sala ${room.roomLabel}`);
           }
         }
       }
@@ -1525,7 +1526,7 @@
           button.addEventListener("click", () => {
             selectRoom(dependency.id, subdependency.id);
 
-            if (myRole === "admin" && token) {
+            if (token) {
               openRegisterForm();
             }
           });

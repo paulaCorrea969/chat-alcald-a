@@ -366,7 +366,7 @@ io.on("connection", (socket) => {
   io.to(roomId).emit("system:message", `${display} se conecto`);
 
   socket.on("chat:message", (text) => {
-    const { username, display, role, roomId } = socket.session;
+    const { username, display, role, roomId, roomLabel } = socket.session;
     const cleanText = String(text || "").trim().slice(0, MAX_MESSAGE_LENGTH);
 
     if (!cleanText) {
@@ -379,6 +379,10 @@ io.on("connection", (socket) => {
       user: display,
       role,
       roomId,
+
+      fromRoomId: roomId,
+      fromRoomLabel: roomLabel,
+
       text: cleanText,
       time: timestamp.toLocaleTimeString("es-CO", {
         hour: "2-digit",
@@ -387,7 +391,7 @@ io.on("connection", (socket) => {
       createdAt: timestamp.toISOString(),
     });
 
-    io.to(roomId).emit("chat:message", messageData);
+    io.emit("chat:message", messageData);
   });
 
   socket.on("chat:delete-message", (messageId) => {
@@ -430,17 +434,13 @@ io.on("connection", (socket) => {
       },
     });
 
-    io.to(roomId).emit("chat:message-deleted", {
+    io.emit("chat:message-deleted", {
       id: deletedMessage.id,
       deletedBy: display,
     });
   });
 
   socket.on("admin:switch-room", (payload) => {
-    if (socket.session.role !== "admin") {
-      socket.emit("chat:error", "Solo el administrador puede cambiar de sala");
-      return;
-    }
 
     const roomId = String(payload?.roomId || "").trim();
     const nextRoom = resolveRoomByRoomId(roomId);
@@ -466,13 +466,18 @@ io.on("connection", (socket) => {
       room: nextRoom,
       history,
     });
+
+    io.emit(
+      "system:message",
+      `${socket.session.display} acaba de entrar a la sala ${nextRoom.roomLabel}`
+    )
   });
 
   socket.on("disconnect", () => {
     const { roomId } = socket.session;
     onlineUsers.delete(socket.id);
     emitUsersUpdate(roomId);
-    io.to(roomId).emit("system:message", `${display} salio`);
+    io.emit("system:message", `${display} entro a la sala ${roomLabel} `);
   });
 });
 
